@@ -27,6 +27,7 @@ from collections import deque
 ACCELEROMETER_DEVICE = '/sys/devices/platform/lis3lv02d/position'
 #ACCELEROMETER_DEVICE = 'a.txt'
 
+
 def read_accelerometer(canvas):
     fh = open(ACCELEROMETER_DEVICE)
     string = fh.read()
@@ -39,6 +40,7 @@ def read_accelerometer(canvas):
     except:
         pass
     GObject.timeout_add(100, read_accelerometer, canvas)
+
 
 class MyCanvas(Gtk.DrawingArea):
     ''' Create a GTK+ widget on which we will draw using Cairo '''
@@ -62,7 +64,7 @@ class MyCanvas(Gtk.DrawingArea):
     def _draw_cb(self, drawing_area, cr):
         self.center = (self.width / 2, self.height / 2)
         self.radius = min(self.width / 2, self.height / 2) - \
-                      self.ball_radius - 20
+               self.ball_radius - 20
         self.cr = cr
         cr.set_line_width(2)
         self.width = drawing_area.get_allocated_width()
@@ -71,7 +73,6 @@ class MyCanvas(Gtk.DrawingArea):
         cr.set_source_rgb(1, 1, 1)
         cr.rectangle(0, 0, self.width, self.height)
         cr.fill()
-
 
         cr.set_source_rgb(0.9450, 0.9450, 0.9450)
         cr.arc(self.center[0], self.center[1],
@@ -113,11 +114,11 @@ class MyCanvas(Gtk.DrawingArea):
 
     def update_ball_and_text(self):
         # Build the ball
-		#if the ball is close to centered, change the color to green
-		if(Math.abs(self.x) < 0.05 and Math.abs(self.y) < 0.05):
-			self.cr.set_source_rgb(0.3012, 1, 0.6) # green
-		else:
-			self.cr.set_source_rgb(0.3012, 0.6, 1) # blue
+        # If the ball is close to centered, change the color to green.
+        if(Math.abs(self.x) < 0.05 and Math.abs(self.y) < 0.05):
+            self.cr.set_source_rgb(0.3012, 1, 0.6)  # green
+        else:
+            self.cr.set_source_rgb(0.3012, 0.6, 1)  # blue
         self.cr.arc(self.x, self.y, self.ball_radius, 0, 2 * pi)
         self.cr.fill()
 
