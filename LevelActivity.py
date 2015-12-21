@@ -20,12 +20,12 @@ from gi.repository import GObject
 from sugar3.activity import widgets
 from sugar3.activity.widgets import StopButton
 from sugar3.activity import activity
-from math import pi, sqrt
+from math import pi, sqrt, fabs
 from gettext import gettext as _
 from collections import deque
 
 ACCELEROMETER_DEVICE = '/sys/devices/platform/lis3lv02d/position'
-#ACCELEROMETER_DEVICE = 'a.txt'
+# ACCELEROMETER_DEVICE = 'a.txt'
 
 
 def read_accelerometer(canvas):
@@ -64,7 +64,7 @@ class MyCanvas(Gtk.DrawingArea):
     def _draw_cb(self, drawing_area, cr):
         self.center = (self.width / 2, self.height / 2)
         self.radius = min(self.width / 2, self.height / 2) - \
-               self.ball_radius - 20
+            self.ball_radius - 20
         self.cr = cr
         cr.set_line_width(2)
         self.width = drawing_area.get_allocated_width()
@@ -79,7 +79,6 @@ class MyCanvas(Gtk.DrawingArea):
                self.radius, 0,
                2 * pi)
         cr.fill()
-
 
         cr.set_source_rgb(0, 0, 0)
         cr.arc(self.center[0], self.center[1],
@@ -115,7 +114,7 @@ class MyCanvas(Gtk.DrawingArea):
     def update_ball_and_text(self):
         # Build the ball
         # If the ball is close to centered, change the color to green.
-        if(Math.abs(self.x) < 0.05 and Math.abs(self.y) < 0.05):
+        if(fabs(self.x) < 0.05 and fabs(self.y) < 0.05):
             self.cr.set_source_rgb(0.3012, 1, 0.6)  # green
         else:
             self.cr.set_source_rgb(0.3012, 0.6, 1)  # blue
@@ -125,13 +124,13 @@ class MyCanvas(Gtk.DrawingArea):
         # Now update the text
 
         # 1. Clear Text
-        self.cr.set_source_rgb(1, 1, 1) # white
+        self.cr.set_source_rgb(1, 1, 1)  # white
         self.cr.rectangle(self.width - 110, self.height - 110,
                           self.width, self.height)
         self.cr.fill()
 
         # 2. Update Text
-        self.cr.set_source_rgb(0, 0, 0) # black
+        self.cr.set_source_rgb(0, 0, 0)  # black
         self.cr.move_to(self.width - 100, self.height - 80)
         self.cr.set_font_size(20)
 
@@ -144,13 +143,12 @@ class MyCanvas(Gtk.DrawingArea):
         # TRANS: Y is for Y axis
         self.cr.show_text(_("Y: %.2f") % (self.y - self.height / 2,))
 
-
     def motion_cb(self, x, y):
         if len(self.prev) >= 2:
-            self.x = self.prev[-2][0] * 0.25 +  self.prev[-1][0] * 0.5 + \
+            self.x = self.prev[-2][0] * 0.25 + self.prev[-1][0] * 0.5 + \
                      self.radius * x * 0.25
-            self.y = self.prev[-2][1] * 0.25 +  self.prev[-1][1] * 0.5 + \
-                     self.radius * y * 0.25
+            self.y = self.prev[-2][1] * 0.25 + self.prev[-1][1] * 0.5 + \
+                self.radius * y * 0.25
             self.prev.popleft()
             self.prev.append([self.x, self.y])
         else:
@@ -169,6 +167,7 @@ class MyCanvas(Gtk.DrawingArea):
         self.y += self.center[1]
 
         self.queue_draw()
+
 
 class LevelActivity(activity.Activity):
     def __init__(self, handle):
