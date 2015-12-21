@@ -113,7 +113,11 @@ class MyCanvas(Gtk.DrawingArea):
 
     def update_ball_and_text(self):
         # Build the ball
-        self.cr.set_source_rgb(0.3012, 0.6, 1) # blue
+		#if the ball is close to centered, change the color to green
+		if(Math.abs(self.x) < 0.05 and Math.abs(self.y) < 0.05):
+			self.cr.set_source_rgb(0.3012, 1, 0.6) # green
+		else:
+			self.cr.set_source_rgb(0.3012, 0.6, 1) # blue
         self.cr.arc(self.x, self.y, self.ball_radius, 0, 2 * pi)
         self.cr.fill()
 
